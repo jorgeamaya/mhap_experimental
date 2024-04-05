@@ -22,7 +22,6 @@ create_cigar = function(cigar_table = NULL,
 # read_cigar_tables----
 
 read_cigar_tables = function(paths = NULL, files = NULL, sample_id_pattern = '.'){
-  
   # Uploading data sets and merge CIGARs tables
   # and generate a metadata table for sample names, runs and sample types (controls vs samples of interest)
   cigar_tables = NULL
@@ -104,7 +103,9 @@ read_cigar_tables = function(paths = NULL, files = NULL, sample_id_pattern = '.'
   
   if(sample_id_pattern != '.'){
     metadata[grepl(sample_id_pattern, metadata[["Sample_id"]]),][["typeofSamp"]] = "Samples"
-    metadata[!grepl(sample_id_pattern, metadata[["Sample_id"]]),][["typeofSamp"]] = "Controls"
+    if(length(metadata[!grepl(sample_id_pattern, metadata[["Sample_id"]]),][["typeofSamp"]]) > 0) {
+      metadata[!grepl(sample_id_pattern, metadata[["Sample_id"]]),][["typeofSamp"]] = "Controls"
+    }
   }else{
     metadata[["typeofSamp"]] = "Samples"
   }

@@ -121,43 +121,44 @@ parser$add_argument("-pop_levels", "--pop_levels", default = NULL,
 parser$add_argument("-selected_checkboxes", "--selected_checkboxes", default = NULL,
                     help="Data points selected with the Shinny App")
 
-# fd = "~/Desktop/MHap/Code/"
-# rd = "~/Desktop/MHap_Data/"
-# cigar_paths = NA
-# cigar_files = file.path("/Users/jar4142/Desktop/MHap_Drive/data/Pfal_example/cigar_tables/")
-# ampseq_jsonfile = NA
-# ampseq_excelfile = NA
-# output = "/Users/jar4142/Desktop/MHap/Results/MHap_Profile"
-# sample_id_pattern = "^ID"
-# markers = file.path("/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/markers.csv")
-# min_abd = 10
-# min_ratio = 0.1
-# sample_ampl_rate = 0.75
-# locus_ampl_rate = 0.75
-# PerformanceReport = FALSE
-# Drug_Surveillance_Report= TRUE
-# Variants_of_Interest_Report = FALSE
-# ref_gff = "/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/PlasmoDB-59_Pfalciparum3D7.gff"
-# ref_fasta = "/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/PlasmoDB-59_Pfalciparum3D7_Genome.fasta"
-# reference_alleles = "/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/drugR_alleles.csv"
-# metadata = file.path("/Users/jar4142/Desktop/MHap_Drive/data/Pfal_example/Pfal_metadata.csv")
-# join_by = "Sample_id"
-# Variable1 = "Subnational_level2"
-# Variable2 = "Quarter_of_Collection"
-# Longitude = "Longitude"
-# Latitude = "Latitude"
-# na_hap_rm = TRUE
-# na_var_rm = TRUE
-# drugs = "Artemisinin,Chloroquine,Pyrimethamine,Sulfadoxine,Lumefantrine,Mefloquine"
-# drugs = strsplit(drugs, ',')[[1]]
-# include_all_drug_markers = TRUE
-# ibd_thres = NA
-# parallel = TRUE
-# ibd_ncol = 4
-# pop_levels = NULL
-# nTasks = 50
-# selected_checkboxes = "/Users/jar4142/Desktop/MHap_Data/selected_checkboxes.csv"
-
+#fd = "~/Desktop/mhap_experimental/Code/"
+#cigar_paths = NA
+##cigar_files = file.path("/Users/jar4142/Desktop/malaria_experimental/cromwell-executions/ampseq/d857623e-4cad-4ddd-b271-97eb8821fdd5/call-ampseq_pipeline/execution/Miseq_Guyana_workshop2023_NA_CIGARVariants_Bfilter.out.tsv")
+#cigar_files = file.path("/Users/jar4142/Desktop/MHap_Testing_Colombia/run1_CIGARVariants_Bfilter.out.tsv")
+#ampseq_jsonfile = NA
+#ampseq_excelfile = NA
+#output = "/Users/jar4142/Desktop/MHap_Testing_Colombia/run1"
+#sample_id_pattern = "^ID"
+#markers = file.path("/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/markers.csv")
+#min_abd = 10
+#min_ratio = 0.1
+#sample_ampl_rate = 0.75
+#locus_ampl_rate = 0.75
+#PerformanceReport = FALSE
+#Drug_Surveillance_Report= TRUE
+#Variants_of_Interest_Report = FALSE
+#ref_gff = "/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/PlasmoDB-59_Pfalciparum3D7.gff"
+#ref_fasta = "/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/PlasmoDB-59_Pfalciparum3D7_Genome.fasta"
+#reference_alleles = "/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/drugR_alleles.csv"
+##metadata = file.path("/Users/jar4142/Desktop/malaria_experimental/metadata.csv")
+#metadata = file.path("/Users/jar4142/Desktop/MHap_Testing_Colombia/Pfal_metadata.csv")
+#join_by = "Sample_id"
+#Variable1 = "Geo_Level"
+#Variable2 = "Temp_Level"
+#Longitude = "Longitude"
+#Latitude = "Latitude"
+#na_hap_rm = TRUE
+#na_var_rm = TRUE
+#drugs = "Artemisinin,Chloroquine,Pyrimethamine,Sulfadoxine,Lumefantrine,Mefloquine"
+#drugs = strsplit(drugs, ',')[[1]]
+#include_all_drug_markers = TRUE
+#ibd_thres = NA
+#parallel = TRUE
+#ibd_ncol = 4
+#pop_levels = NULL
+#nTasks = 50
+#selected_checkboxes = "/Users/jar4142/Desktop/Guyana_MHap_Data/selected_checkboxes.csv"
+#
 # Defining and checking variables ----
 print("starting to parse variables")
 args = parser$parse_args()
@@ -235,9 +236,9 @@ print(paste0('reference_alleles: ', reference_alleles))
 
 #Obtain data points for plotting
 selected_checkboxes = args$selected_checkboxes
+
 content = readLines(selected_checkboxes)
 positions <- grep("__$", content)
-
 gene_names = content[seq(positions[1]+1, positions[2]-1, by = 1)]
 gene_ids = content[seq(positions[2]+1, positions[3]-1, by = 1)]
 subnational_level = content[seq(positions[3]+1, positions[4]-1, by = 1)]
@@ -279,6 +280,7 @@ na_hap_rm = as.logical(args$na_hap_rm)
 print(paste0('na_hap_rm: ', na_hap_rm))
 
 drugs = args$drugs
+#PENDING CORRECTION
 if(drugs == 'NaN'){
   drugs = NA
 }else{
@@ -288,7 +290,6 @@ print(paste0('drugs: ', drugs))
 
 var_filter = c(paste(c(Variable1, paste(gsub('\\.', ' ', subnational_level), collapse = ",")), collapse = ";"),
 paste(c(Variable2, paste(period_of_collection, collapse = ",")), collapse =";"))
-
 print(paste0('var_filter: ', var_filter))
 
 include_all_drug_markers = as.logical(args$include_all_drug_markers)
