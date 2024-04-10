@@ -121,44 +121,44 @@ parser$add_argument("-pop_levels", "--pop_levels", default = NULL,
 parser$add_argument("-selected_checkboxes", "--selected_checkboxes", default = NULL,
                     help="Data points selected with the Shinny App")
 
-#fd = "~/Desktop/mhap_experimental/Code/"
-#cigar_paths = NA
-##cigar_files = file.path("/Users/jar4142/Desktop/malaria_experimental/cromwell-executions/ampseq/d857623e-4cad-4ddd-b271-97eb8821fdd5/call-ampseq_pipeline/execution/Miseq_Guyana_workshop2023_NA_CIGARVariants_Bfilter.out.tsv")
-#cigar_files = file.path("/Users/jar4142/Desktop/MHap_Testing_Colombia/run1_CIGARVariants_Bfilter.out.tsv")
-#ampseq_jsonfile = NA
-#ampseq_excelfile = NA
-#output = "/Users/jar4142/Desktop/MHap_Testing_Colombia/run1"
-#sample_id_pattern = "^ID"
-#markers = file.path("/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/markers.csv")
-#min_abd = 10
-#min_ratio = 0.1
-#sample_ampl_rate = 0.75
-#locus_ampl_rate = 0.75
-#PerformanceReport = FALSE
-#Drug_Surveillance_Report= TRUE
-#Variants_of_Interest_Report = FALSE
-#ref_gff = "/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/PlasmoDB-59_Pfalciparum3D7.gff"
-#ref_fasta = "/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/PlasmoDB-59_Pfalciparum3D7_Genome.fasta"
-#reference_alleles = "/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/drugR_alleles.csv"
-##metadata = file.path("/Users/jar4142/Desktop/malaria_experimental/metadata.csv")
-#metadata = file.path("/Users/jar4142/Desktop/MHap_Testing_Colombia/Pfal_metadata.csv")
-#join_by = "Sample_id"
-#Variable1 = "Geo_Level"
-#Variable2 = "Temp_Level"
-#Longitude = "Longitude"
-#Latitude = "Latitude"
-#na_hap_rm = TRUE
-#na_var_rm = TRUE
-#drugs = "Artemisinin,Chloroquine,Pyrimethamine,Sulfadoxine,Lumefantrine,Mefloquine"
-#drugs = strsplit(drugs, ',')[[1]]
-#include_all_drug_markers = TRUE
-#ibd_thres = NA
-#parallel = TRUE
-#ibd_ncol = 4
-#pop_levels = NULL
-#nTasks = 50
-#selected_checkboxes = "/Users/jar4142/Desktop/Guyana_MHap_Data/selected_checkboxes.csv"
-#
+# fd = "~/Desktop/mhap_experimental/Code/"
+# cigar_paths = NA
+# cigar_files = file.path("/Users/jar4142/Desktop/malaria_experimental/cromwell-executions/ampseq/d857623e-4cad-4ddd-b271-97eb8821fdd5/call-ampseq_pipeline/execution/Miseq_Guyana_workshop2023_NA_CIGARVariants_Bfilter.out.tsv")
+# cigar_files = file.path("/Users/jar4142/Desktop/MHap_Testing/4_MHap_Testing_Fourth_Plate_Guyana/CIGARVariants_Bfilter.out.tsv")
+# ampseq_jsonfile = NA
+# ampseq_excelfile = NA
+# output = "/Users/jar4142/Desktop/MHap_Testing/4_MHap_Testing_Fourth_Plate_Guyana/"
+# sample_id_pattern = "^G"
+# markers = file.path("/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/markers.csv")
+# min_abd = 10
+# min_ratio = 0.1
+# sample_ampl_rate = 0.75
+# locus_ampl_rate = 0.75
+# PerformanceReport = FALSE
+# Drug_Surveillance_Report= TRUE
+# Variants_of_Interest_Report = FALSE
+# ref_gff = "/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/PlasmoDB-59_Pfalciparum3D7.gff"
+# ref_fasta = "/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/PlasmoDB-59_Pfalciparum3D7_Genome.fasta"
+# reference_alleles = "/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/drugR_alleles.csv"
+# metadata = file.path("/Users/jar4142/Desktop/malaria_experimental/metadata.csv")
+# metadata = file.path("/Users/jar4142/Desktop/MHap_Testing/4_MHap_Testing_Fourth_Plate_Guyana/guyana_metadata_cleaned_no_header_extracted.csv")
+# join_by = "Sample_id"
+# Variable1 = "Geo_Level"
+# Variable2 = "Temp_Level"
+# Longitude = "Longitude"
+# Latitude = "Latitude"
+# na_hap_rm = TRUE
+# na_var_rm = TRUE
+# drugs = "Artemisinin,Chloroquine,Pyrimethamine,Sulfadoxine,Lumefantrine,Mefloquine"
+# drugs = strsplit(drugs, ',')[[1]]
+# include_all_drug_markers = TRUE
+# ibd_thres = NA
+# parallel = TRUE
+# ibd_ncol = 4
+# pop_levels = NULL
+# nTasks = 50
+# selected_checkboxes = "/Users/jar4142/Desktop/MHap_Testing/4_MHap_Testing_Fourth_Plate_Guyana/selected_checkboxes.csv"
+# #
 # Defining and checking variables ----
 print("starting to parse variables")
 args = parser$parse_args()
@@ -239,10 +239,12 @@ selected_checkboxes = args$selected_checkboxes
 
 content = readLines(selected_checkboxes)
 positions <- grep("__$", content)
-gene_names = content[seq(positions[1]+1, positions[2]-1, by = 1)]
-gene_ids = content[seq(positions[2]+1, positions[3]-1, by = 1)]
-subnational_level = content[seq(positions[3]+1, positions[4]-1, by = 1)]
-period_of_collection = content[seq(positions[4]+1, length(content), by = 1)]
+subnational_level = content[seq(positions[1]+1, positions[2]-1, by = 1)]
+period_of_collection = content[seq(positions[2]+1, positions[3]-1, by = 1)]
+gene_names = content[seq(positions[3]+1, positions[4]-1, by = 1)]
+gene_ids = content[seq(positions[4]+1, positions[5]-1, by = 1)]
+fourcast_names = content[seq(positions[5]+1, positions[6]-1, by = 1)]
+fourcast_ids = content[seq(positions[6]+1, length(content), by = 1)]
 
 print(paste0('gene_names: ', gene_names)) 
 print(paste0('gene_ids: ', gene_ids))
@@ -449,6 +451,7 @@ if(PerformanceReport){
    ampseq_object_filtered@metadata = left_join(ampseq_object_filtered@metadata,
                                                metadata,
                                                by = join_by)
+   print(ampseq_object_filtered@metadata$Sample_id)
  }
  # if data was imported as cigar tables and no additional steps were provided
  #if(!is.na(cigar_paths)|!is.na(cigar_files) & is.na(ibd_thres) & !Drug_Surveillance_Report & !Variants_of_Interest_Report & !file.exists(file.path(paste0(output, '.xlsx')))){
@@ -484,7 +487,7 @@ if(Drug_Surveillance_Report){
  }else{
    ampseq_drug = ampseq_object_filtered
  }
-
+ 
  gt = ampseq_drug@gt
  metadata_extracted = ampseq_drug@metadata
  markers_extracted = ampseq_object@markers

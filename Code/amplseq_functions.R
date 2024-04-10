@@ -100,7 +100,6 @@ read_cigar_tables = function(paths = NULL, files = NULL, sample_id_pattern = '.'
                         run = gsub('/.+$', '',gsub("^\\d+/","",cigar_table[['Sample_id']])),
                         order_in_plate = as.integer(gsub("^S|_$","",str_extract(cigar_table[['Sample_id']], "(S\\d+$|S\\d+_)"))), typeofSamp = NA)
   
-  
   if(sample_id_pattern != '.'){
     metadata[grepl(sample_id_pattern, metadata[["Sample_id"]]),][["typeofSamp"]] = "Samples"
     if(length(metadata[!grepl(sample_id_pattern, metadata[["Sample_id"]]),][["typeofSamp"]]) > 0) {
@@ -618,7 +617,6 @@ haplotypes_respect_to_reference = function(gt,
                                            ){
   library(ape)
   library(Biostrings)
-
   # Call 3D7 genome and gff---
   # Call 3D7 reference genome and its corresponding annotation in the gff file
   reference_gff = read.gff(gff_file)
@@ -748,7 +746,6 @@ haplotypes_respect_to_reference = function(gt,
   
   
   # Convert cigar format to standard mutation nomenclature PMC1867422---
-
   ## Filter drugR markers---
   if(length(gene_ids) > 1){
     moi_loci_abd_table = gt[,grep(paste(gene_names, collapse = "|"), colnames(gt))]  
@@ -767,7 +764,6 @@ haplotypes_respect_to_reference = function(gt,
   
   for(amplicon in colnames(moi_loci_abd_table)){ # For each amplicon in columns
     for(sample in 1:nrow(moi_loci_abd_table)){ # For each sample in rows
-      
       locus = moi_loci_abd_table[sample, amplicon] # Get the genotype in the locus
       
       if(is.na(locus)){ # if the locus is NULL complete the cell with NA
@@ -1337,7 +1333,6 @@ drug_resistant_haplotypes = function(gt,
                                      na.hap.rm = TRUE,
                                      metadata_extracted,
                                      markers_extracted){
-  
 
   # Call reference alleles
   print("Uploading Resistant and Sensitive Alleles")
@@ -1351,14 +1346,13 @@ drug_resistant_haplotypes = function(gt,
   if(!is.null(filters)){
     filters = strsplit(filters,';')
     for(temp_filter in 1:length(filters)){
-      
+      browser()
       gt = filter_samples(gt,
                       metadata_extracted[[filters[[temp_filter]][1]]] %in% strsplit(filters[[temp_filter]][2],',')[[1]])
       metadata_extracted = filter_samples(metadata_extracted,
                      metadata_extracted[[filters[[temp_filter]][1]]] %in% strsplit(filters[[temp_filter]][2],',')[[1]])
     }
   }
-  
   # Define haplotypes respect to a reference genome
   print("Defining haplotypes respect to a reference genome")
   haps_respect_to_ref = haplotypes_respect_to_reference(gt,
@@ -2360,13 +2354,18 @@ drug_resistant_haplotypes = function(gt,
   
   samples_pop_quarter = drug_phenotype_summary %>%
     summarise(count = nlevels(as.factor(Sample_id)), .by = c(var1, var2)) 
-  
+  print(drug_phenotype_summary)
+  drug_phenotype_summary$Longitude = as.numeric(drug_phenotype_summary$Longitude)
+  drug_phenotype_summary$Latitude = as.numeric(drug_phenotype_summary$Latitude)
+  print(drug_phenotype_summary$Longitude)
+  print(drug_phenotype_summary$Latitude)
+  str(drug_phenotype_summary)
   drug_phenotype_summary = drug_phenotype_summary %>%
     summarise(count = n(),
-              Longitude = mean(Longitude),
-              Latitude = mean(Latitude),
+              Longitude = mean(Longitude, na.rm = T),
+              Latitude = mean(Latitude, na.rm = T),
               .by = c(Drug, var1, var2, Phenotype))
-  
+  print(drug_phenotype_summary)
   # if(!is.null(filters)){
   #   #filters = strsplit(filters,';')
   #   for(temp_filter in 1:length(filters)){
@@ -2506,9 +2505,9 @@ drug_resistant_haplotypes = function(gt,
   
   drug_phenotype_summary_sdf %<>% filter(Phenotype == "Mutation(s) associated with a resistant phenotype")
   
-  
+  print(drug_phenotype_summary_sdf)  
   print("Transforming data to spatial points")
-  drug_phenotype_summary_sdf = SpatialPointsDataFrame(coords = drug_phenotype_summary_sdf[,c("Latitude", "Longitude")],
+  drug_phenotype_summary_sdf = SpatialPointsDataFrame(coords = drug_phenotype_summary_sdf[,c("Longitude", "Latitude")],
                                                     data = drug_phenotype_summary_sdf,
                                                     proj4string = sp::CRS("+proj=longlat +datum=WGS84"))
                                                     #proj4string = sp::CRS("+init=epsg:4326"))
