@@ -1,12 +1,11 @@
 #!/bin/r env
 
-if(TRUE){
-  
+write("Watermark 2", stderr())
 library(argparse)
 library(stringr)
 library(rmarkdown)
 # Parse arguments ----
-if(FALSE) {
+
 parser = ArgumentParser()
 
 parser$add_argument("-fd", "--fd", default = 'NaN',
@@ -134,54 +133,60 @@ parser$add_argument("-pop_levels", "--pop_levels", default = NULL,
 
 parser$add_argument("-selected_checkboxes", "--selected_checkboxes", default = NULL,
                     help="Data points selected with the Shinny App")
-}
 
-fd = "~/Desktop/mhap_experimental/Code/"
-cigar_paths = NA
-#cigar_files = file.path("/Users/jar4142/Desktop/malaria_experimental/cromwell-executions/ampseq/d857623e-4cad-4ddd-b271-97eb8821fdd5/call-ampseq_pipeline/execution/Miseq_Guyana_workshop2023_NA_CIGARVariants_Bfilter.out.tsv")
-cigar_files = file.path("/Users/jar4142/Desktop/Paulo_Reconcile/cigar_tables/run1_CIGARVariants_Bfilter.out.tsv")
-ampseq_jsonfile = NA
-ampseq_excelfile = NA
-output = "/Users/jar4142/Desktop/malaria_experimental/"
-sample_id_pattern = "^ID"
-markers = file.path("/Users/jar4142/Desktop/Paulo_Reconcile/Paulo_Reconcile_2/markers.csv")
-min_abd = 10
-min_ratio = 0.1
-sample_ampl_rate = 0.75
-locus_ampl_rate = 0.75
-PerformanceReport = TRUE
-Drug_Surveillance_Report= TRUE
-Variants_of_Interest_Report = FALSE
-ref_gff = "/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/PlasmoDB-59_Pfalciparum3D7.gff"
-ref_fasta = "/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/PlasmoDB-59_Pfalciparum3D7_Genome.fasta"
-reference_alleles = "/Users/jar4142/Desktop/Paulo_Reconcile/Paulo_Reconcile_2/drugR_alleles.csv"
-#metadata_file = file.path("/Users/jar4142/Desktop/malaria_experimental/metadata.csv")
-metadata_file = file.path("/Users/jar4142/Desktop/Paulo_Reconcile/Pfal_metadata_edited.csv")
-join_by = "Sample_id"
-Variable1 = "Geo_Level"
-Variable2 = "Temp_Level"
-Longitude = "Longitude"
-Latitude = "Latitude"
-na_hap_rm = TRUE
-na_var_rm = TRUE
-drugs = "Artemisinin,Chloroquine,Pyrimethamine,Sulfadoxine,Lumefantrine,Mefloquine"
-drugs = strsplit(drugs, ',')[[1]]
-include_all_drug_markers = TRUE
-ibd_thres = 0.99
-parallel = TRUE
-ibd_ncol = 4
-pop_levels = NULL
-nTasks = NULL
-selected_checkboxes = "/Users/jar4142/Desktop/MHap_Testing/9_2_MHap_Testing_Ninth_Plate_Guyana/selected_checkboxes.csv"
-off_target_formula = "dVSITES_ij>=0.3"
-flanking_INDEL_formula = "flanking_INDEL==TRUE&h_ij>=0.66"
-PCR_errors_formula = "h_ij>=0.66&h_ijminor>=0.66"
-hap_color_palette = "random"
-poly_quantile = 0.75
-pairwise_relatedness_table = "/Users/jar4142/Desktop/Paulo_Reconcile/pairwise_relatedness.csv"
-}
+parser$add_argument("-poly_quantile", "--poly_quantile", default = 'null',
+                    help="Quantile to define polyclonal samples")
+
+parser$add_argument("-pairwise_relatedness_table", "--pairwise_relatedness_table", default = 'null',
+                    help="string with the file name of the pairwise_relatedness_table")
+
+
+
+# fd = "~/Desktop/mhap_experimental/Code/"
+# cigar_paths = NA
+# #cigar_files = file.path("/Users/jar4142/Desktop/malaria_experimental/cromwell-executions/ampseq/d857623e-4cad-4ddd-b271-97eb8821fdd5/call-ampseq_pipeline/execution/Miseq_Guyana_workshop2023_NA_CIGARVariants_Bfilter.out.tsv")
+# cigar_files = file.path("/Users/jar4142/Desktop/Paulo_Reconcile/cigar_tables/run1_CIGARVariants_Bfilter.out.tsv")
+# ampseq_jsonfile = NA
+# ampseq_excelfile = NA
+# output = "/Users/jar4142/Desktop/malaria_experimental/"
+# sample_id_pattern = "^ID"
+# markers = file.path("/Users/jar4142/Desktop/Paulo_Reconcile/Paulo_Reconcile_2/markers.csv")
+# min_abd = 10
+# min_ratio = 0.1
+# sample_ampl_rate = 0.75
+# locus_ampl_rate = 0.75
+# PerformanceReport = TRUE
+# Drug_Surveillance_Report= TRUE
+# Variants_of_Interest_Report = FALSE
+# ref_gff = "/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/PlasmoDB-59_Pfalciparum3D7.gff"
+# ref_fasta = "/Users/jar4142/Desktop/MHap_Drive/reference/Pfal_3D7/PlasmoDB-59_Pfalciparum3D7_Genome.fasta"
+# reference_alleles = "/Users/jar4142/Desktop/Paulo_Reconcile/Paulo_Reconcile_2/drugR_alleles.csv"
+# #metadata_file = file.path("/Users/jar4142/Desktop/malaria_experimental/metadata.csv")
+# metadata_file = file.path("/Users/jar4142/Desktop/Paulo_Reconcile/Pfal_metadata_edited.csv")
+# join_by = "Sample_id"
+# Variable1 = "Geo_Level"
+# Variable2 = "Temp_Level"
+# Longitude = "Longitude"
+# Latitude = "Latitude"
+# na_hap_rm = TRUE
+# na_var_rm = TRUE
+# drugs = "Artemisinin,Chloroquine,Pyrimethamine,Sulfadoxine,Lumefantrine,Mefloquine"
+# drugs = strsplit(drugs, ',')[[1]]
+# include_all_drug_markers = TRUE
+# ibd_thres = 0.99
+# parallel = TRUE
+# ibd_ncol = 4
+# pop_levels = NULL
+# nTasks = NULL
+# selected_checkboxes = "/Users/jar4142/Desktop/MHap_Testing/9_2_MHap_Testing_Ninth_Plate_Guyana/selected_checkboxes.csv"
+# off_target_formula = "dVSITES_ij>=0.3"
+# flanking_INDEL_formula = "flanking_INDEL==TRUE&h_ij>=0.66"
+# PCR_errors_formula = "h_ij>=0.66&h_ijminor>=0.66"
+# hap_color_palette = "random"
+# poly_quantile = 0.75
+# pairwise_relatedness_table = "/Users/jar4142/Desktop/Paulo_Reconcile/pairwise_relatedness.csv"
+
 # #
-if(FALSE){
 # Defining and checking variables ----
 print("starting to parse variables")
 args = parser$parse_args()
@@ -235,9 +240,8 @@ flanking_INDEL_formula = as.character(args$flanking_INDEL_formula)
 
 # PCR_errors_formula filter
 PCR_errors_formula = as.character(args$PCR_errors_formula)
-}
+
 #Filter
-if(TRUE){
 off_target_formula = gsub('"',"",off_target_formula)
 off_target_formula = gsub('&'," & ",off_target_formula, ignore.case = TRUE)
 off_target_formula = gsub('\\|'," \\| ",off_target_formula, ignore.case = TRUE)
@@ -362,9 +366,7 @@ PCR_errors_formula = gsub('\\*'," \\* ", PCR_errors_formula, ignore.case = TRUE)
 PCR_errors_formula = gsub('/'," / ", PCR_errors_formula, ignore.case = TRUE)
 
 print(paste0('PCR_errors_formula: ', PCR_errors_formula))
-}
 
-if(FALSE){
 # sample_ampl_rate
 sample_ampl_rate = as.numeric(args$sample_ampl_rate)
 print(paste0('sample_ampl_rate: ', sample_ampl_rate))
@@ -397,9 +399,7 @@ print(paste0('reference_alleles: ', reference_alleles))
 
 #Obtain data points for plotting
 selected_checkboxes = args$selected_checkboxes
-}
 
-if(TRUE){
 content = readLines(selected_checkboxes)
 positions <- grep("__$", content)
 subnational_level = content[seq(positions[1]+1, positions[2]-1, by = 1)]
@@ -408,15 +408,13 @@ gene_names = content[seq(positions[3]+1, positions[4]-1, by = 1)]
 gene_ids = content[seq(positions[4]+1, positions[5]-1, by = 1)]
 fourcast_names = content[seq(positions[5]+1, positions[6]-1, by = 1)]
 fourcast_ids = content[seq(positions[6]+1, length(content), by = 1)]
-}
 
-if(FALSE){
 print(paste0('gene_names: ', gene_names)) 
 print(paste0('gene_ids: ', gene_ids))
 
 # metadata
-metadata_file = as.character(args$metadata)
-metadata_file = ifelse(metadata == 'NaN', NA, file.path(metadata))
+metadata_file = args$metadata
+#metadata_file = ifelse(metadata == 'NaN', NA, file.path(metadata))
 print(paste0('metadata: ', metadata_file))
 
 # join metadata by
@@ -446,6 +444,9 @@ na_var_rm = as.logical(args$na_var_rm)
 na_hap_rm = as.logical(args$na_hap_rm)
 print(paste0('na_hap_rm: ', na_hap_rm))
 
+hap_color_palette = args$hap_color_palette
+print(paste0('hap_color_palette: ', hap_color_palette))
+
 drugs = args$drugs
 #PENDING CORRECTION
 if(drugs == 'NaN'){
@@ -454,12 +455,10 @@ if(drugs == 'NaN'){
   drugs = strsplit(drugs, ',')[[1]]
 }
 print(paste0('drugs: ', drugs))
-}
 
 var_filter = c(paste(c(Variable1, paste(gsub('\\.', ' ', subnational_level), collapse = ",")), collapse = ";"),
 paste(c(Variable2, paste(period_of_collection, collapse = ",")), collapse =";"))
 
-if(FALSE){
 print(paste0('var_filter: ', var_filter))
 
 include_all_drug_markers = as.logical(args$include_all_drug_markers)
@@ -472,7 +471,7 @@ print(paste0('ibd_thres: ', ibd_thres))
 
 # pairwise_relatedness_table
 pairwise_relatedness_table = as.character(args$pairwise_relatedness_table)
-pairwise_relatedness_table = ifelse(pairwise_relatedness_table == 'NaN', NA, file.path(wd, pairwise_relatedness_table))
+pairwise_relatedness_table = ifelse(pairwise_relatedness_table == 'NaN', NA, file.path(pairwise_relatedness_table))
 print(paste0('pairwise_relatedness_table: ', pairwise_relatedness_table))
 
 # parallel
@@ -480,7 +479,8 @@ parallel = as.logical(args$parallel)
 print(paste0('parallel: ', parallel))
 
 # nTasks
-nTasks = as.integer(args$nTasks)
+#nTasks = as.integer(args$nTasks)
+nTasks = NULL
 print(paste0('nTasks: ', nTasks))
 
 # Task_id
@@ -518,9 +518,7 @@ print(paste0('output: ', output))
 #  ampseq_excelfile = file.path(paste0(output, '.xlsx'))
 #}
 #
-}
 
-if(TRUE) {
 print("All variables checked")
 # Check packages and functions----
 print("Loading libraries and functions")
@@ -1659,6 +1657,7 @@ if(!is.na(sample_ampl_rate)){
 
 ## Printing performance report----
 
+print("Entering performance report")
 if(PerformanceReport == TRUE){
   
   all_loci_amplification_rate = ampseq_object@plots$all_loci_amplification_rate
@@ -1710,11 +1709,9 @@ if(PerformanceReport == TRUE){
   # Assign variables based on command-line arguments
   render(file.path(paste0(output, '_Performance_Report.Rmd')), params = list(
     RData_image = imagename),
-    output_dir = paste0(output, "Results"))
+    output_dir = "Results")
   print("Leaving render script")
 }
-
-
 
 # if data was imported as cigar tables and no additional steps were provided
 # if(!is.na(cigar_paths)|!is.na(cigar_files) & is.na(ibd_thres)){
@@ -1778,9 +1775,8 @@ if(PerformanceReport == TRUE){
 #   #              name = file.path(wd, paste0(output, '.xlsx')))
 # }
 
-}
-
 # Drug Resistance surveillance ----
+print("Entering Drug Surveillance")
 if(Drug_Surveillance_Report){
   print('Starting drug surveillance report')
   variables = 'Sample_id'
@@ -1833,13 +1829,12 @@ if(Drug_Surveillance_Report){
   # Assign variables based on command-line arguments
   render(file.path(paste0(output, '_DRS_Report.Rmd')), params = list(
     RData_image = imagename),
-    output_dir = paste0(output, "Results"))
-  
-  
-  
+    output_dir = "Results")
   print("Leaving render script")
 }
+
 # Variants of interest ----
+print("Entering variant of interest")
 if(Variants_of_Interest_Report){
   
   variables = 'Sample_id'
@@ -1866,6 +1861,7 @@ if(Variants_of_Interest_Report){
   
   save(file = imagename, list = c('haplotypes_respect_to_reference_plot'))
   
+  print("Saving image for variants of interest")
 }
 # Genetic Variants of interest---
 # Genetic Relatedness ----
@@ -1873,7 +1869,7 @@ if(!is.null(ibd_thres)){
   
   # call hmmIBD and PCA functions from Rcpp
   sourceCpp(file.path(fd,'hmmloglikelihood.cpp'))
-  
+  print(nTasks)
   if(nTasks > 1 && !is.null(nTasks)){
     
     if(ibd_step == 'pairwise'){
@@ -2003,7 +1999,7 @@ if(!is.null(ibd_thres)){
       # Assign variables based on command-line arguments
       render(file.path(paste0(output, '_IBD_Connectivity_Report.Rmd')), params = list(
         RData_image = imagename),
-        output_dir = paste0(output, "Results"))
+        output_dir = "Results")
       
       print("Leaving render script")
       
@@ -2061,7 +2057,7 @@ if(!is.null(ibd_thres)){
       # Assign variables based on command-line arguments
       render(file.path(paste0(output, '_IBD_Transmission_Report.Rmd')), params = list(
         RData_image = imagename),
-        output_dir = paste0(output, "Results"))
+        output_dir = "Results")
       
       print("Leaving render script")
       
@@ -2173,7 +2169,7 @@ if(!is.null(ibd_thres)){
     # Assign variables based on command-line arguments
     render(file.path(paste0(output, '_IBD_Connectivity_Report.Rmd')), params = list(
       RData_image = imagename),
-      output_dir = paste0(output, "Results"))
+      output_dir = "Results")
     
     print("Leaving render script")
     
@@ -2231,7 +2227,7 @@ if(!is.null(ibd_thres)){
     # Assign variables based on command-line arguments
     render(file.path(paste0(output, '_IBD_Transmission_Report.Rmd')), params = list(
       RData_image = imagename),
-      output_dir = paste0(output, "Results"))
+      output_dir = "Results")
     
     print("Leaving render script")
   }
@@ -2337,7 +2333,7 @@ if(!is.na(poly_quantile)){
   # Assign variables based on command-line arguments
   render(file.path(paste0(output, '_COI_Report.Rmd')), params = list(
     RData_image = imagename),
-    output_dir = paste0(output, "Results"))
+    output_dir = "Results")
   
   print("Leaving render script")
   
@@ -2377,343 +2373,343 @@ if(!is.na(poly_quantile)){
 
 # Cleaning, filtering and adding metadata to the  ampseq_object----
 
-if(PerformanceReport){
- ampseq_object_filtered = ampseq_object
- # add metadata
- if(!is.na(metadata)){
-    # Upload metadata from an external source
-    metadata = read.csv(metadata)
-    # Merge the external metadata with our ampseq_object
-    ampseq_object_filtered@metadata = left_join(ampseq_object_filtered@metadata,
-                                                metadata,
-                                                by = join_by)
-    }
- 
- 
- 
- # Controls
- # # Coverage
- # # if data was imported as cigar tables
- # if(!is.na(cigar_paths)|!is.na(cigar_files)){
- #   ampseq_object_filtered = filter_samples(ampseq_object, v = ampseq_object@metadata$typeofSamp == 'Samples')
- # }
- # # if locus_ampl_rate was provided
- # if(!is.na(locus_ampl_rate)){
- #   ampseq_object_filtered = locus_amplification_rate(ampseq_object_filtered, threshold = locus_ampl_rate)
- # }
- # 
- # # if sample_ampl_rate was provided
- # if(!is.na(sample_ampl_rate)){
- #   ampseq_object_filtered = sample_amplification_rate(ampseq_object_filtered, threshold = sample_ampl_rate)
- # }
- # 
- # # if data was imported as cigar tables and no additional steps were provided
- # if(!is.na(cigar_paths)|!is.na(cigar_files) & is.na(ibd_thres)){
- #   # save data in excel format
- #   # write_ampseq(ampseq_object = ampseq_object_filtered,
- #   #              format = 'excel',
- #   #              name = file.path(wd, paste0(output, '.xlsx')))
- }
- # save performance_report.RData
-}else{
- ampseq_object_filtered = ampseq_object
- # if locus_ampl_rate was provided
- if(!is.na(locus_ampl_rate) & "loci_performance" %in% slotNames(ampseq_object_filtered)){
-   ampseq_object_filtered = locus_amplification_rate(ampseq_object_filtered, threshold = locus_ampl_rate)
- }
- # if sample_ampl_rate was provided
- if(!is.na(sample_ampl_rate) & "sample_ampl_rate" %in% colnames(ampseq_object_filtered@metadata)){
-   ampseq_object_filtered = sample_amplification_rate(ampseq_object_filtered, threshold = sample_ampl_rate)
- }
- # add metadata
- if(!is.na(metadata)){
-   # Upload metadata from an external source
-   print("Uploading metadata")
-   metadata = read.csv(metadata)
-   shared_variables = names(ampseq_object_filtered@metadata)[names(ampseq_object_filtered@metadata) %in% names(metadata)]
-   shared_variables = shared_variables[!(shared_variables %in% c('Sample_id', join_by))]
-
-   if(length(shared_variables) > 0){
-     print(paste0('The following variables will be overwritten: ', paste(shared_variables, collapse = ', ')))
-     for(variable in shared_variables){
-       ampseq_object_filtered@metadata[[variable]] = NULL
-     }
-   }
-   print("Adding metadata to ampseq object")
-   # Merge the external metadata with our ampseq_object
-   ampseq_object_filtered@metadata = left_join(ampseq_object_filtered@metadata,
-                                               metadata,
-                                               by = join_by)
-   print(ampseq_object_filtered@metadata$Sample_id)
- }
- # if data was imported as cigar tables and no additional steps were provided
- #if(!is.na(cigar_paths)|!is.na(cigar_files) & is.na(ibd_thres) & !Drug_Surveillance_Report & !Variants_of_Interest_Report & !file.exists(file.path(paste0(output, '.xlsx')))){
-   # save data in excel format
-   # write_ampseq(ampseq_object = ampseq_object_filtered,
-   #              format = 'excel',
-   #              name = file.path(wd, paste0(output, '.xlsx')))
- #}
-}
-
-#
-# Drug Resistance surveillance ----
-
-if(Drug_Surveillance_Report){
- print('Starting drug surveillance report')
- variables = 'Sample_id'
-
- if(!is.na(Variable1)){
-   variables = c(variables, Variable1)
- }
- if(!is.na(Variable2)){
-   variables = c(variables, Variable2)
- }
- if(include_all_drug_markers){
-   print('including drug markers with low amplification rate')
-   ampseq_drug = ampseq_object_filtered
-   ampseq_drug@gt = cbind(ampseq_drug@gt,
-                                      ampseq_drug@discarded_loci$gt[rownames(ampseq_drug@discarded_loci$gt) %in%
-                                                                                  rownames(ampseq_drug@gt),
-                                                                                grepl(paste0(gene_names, collapse = '|'),colnames(ampseq_drug@discarded_loci$gt))])
-   ampseq_drug@markers = rbind(ampseq_drug@markers,
-                               ampseq_drug@discarded_loci$markers[grepl(paste0(gene_names, collapse = '|'),ampseq_drug@discarded_loci$markers$amplicon),])
- }else{
-   ampseq_drug = ampseq_object_filtered
- }
- 
- gt = ampseq_drug@gt
- metadata_extracted = ampseq_drug@metadata
- markers_extracted = ampseq_object@markers
-  
- drug_resistant_haplotypes_plot = drug_resistant_haplotypes(gt = gt,
-                                                            reference_alleles = reference_alleles,
-                                                            gene_names = gene_names,
-                                                            gene_ids = gene_ids,
-                                                            gff_file = ref_gff,
-                                                            fasta_file = ref_fasta,
-                                                            variables = variables,
-                                                            Longitude = Longitude,
-                                                            Latitude = Latitude,
-                                                            na.var.rm = na_var_rm,
-                                                            na.hap.rm = na_hap_rm,
-                                                            drugs = drugs,
-                                                            filters = var_filter,
-                                                            metadata_extracted = metadata_extracted,
-                                                            markers_extracted = markers_extracted)
-
- print('Generation of plots and tables for DRS report done')
- imagename = file.path(paste0(output, '_DRS_Report.RData'))
- save(file = imagename, list = c('drug_resistant_haplotypes_plot'))
- system(paste0('cp ', file.path(fd, 'MHap_Analysis_DRS_Report_Template.Rmd'), ' ', file.path(paste0(output, '_DRS_Report.Rmd'))))
-
- # Assign variables based on command-line arguments
- render(file.path(paste0(output, '_DRS_Report.Rmd')), params = list(
-   RData_image = imagename),
- output_dir = "Results")
- print("Leaving render script")
-}
-
-
-
-
-
-
-
-
-
-
-## Variants of interest ----
-#
-#if(Variants_of_Interest_Report){
+# if(PerformanceReport){
+#  ampseq_object_filtered = ampseq_object
+#  # add metadata
+#  if(!is.na(metadata)){
+#     # Upload metadata from an external source
+#     metadata = read.csv(metadata)
+#     # Merge the external metadata with our ampseq_object
+#     ampseq_object_filtered@metadata = left_join(ampseq_object_filtered@metadata,
+#                                                 metadata,
+#                                                 by = join_by)
+#     }
 #  
+#  
+#  
+#  # Controls
+#  # # Coverage
+#  # # if data was imported as cigar tables
+#  # if(!is.na(cigar_paths)|!is.na(cigar_files)){
+#  #   ampseq_object_filtered = filter_samples(ampseq_object, v = ampseq_object@metadata$typeofSamp == 'Samples')
+#  # }
+#  # # if locus_ampl_rate was provided
+#  # if(!is.na(locus_ampl_rate)){
+#  #   ampseq_object_filtered = locus_amplification_rate(ampseq_object_filtered, threshold = locus_ampl_rate)
+#  # }
+#  # 
+#  # # if sample_ampl_rate was provided
+#  # if(!is.na(sample_ampl_rate)){
+#  #   ampseq_object_filtered = sample_amplification_rate(ampseq_object_filtered, threshold = sample_ampl_rate)
+#  # }
+#  # 
+#  # # if data was imported as cigar tables and no additional steps were provided
+#  # if(!is.na(cigar_paths)|!is.na(cigar_files) & is.na(ibd_thres)){
+#  #   # save data in excel format
+#  #   # write_ampseq(ampseq_object = ampseq_object_filtered,
+#  #   #              format = 'excel',
+#  #   #              name = file.path(wd, paste0(output, '.xlsx')))
+#  }
+#  # save performance_report.RData
+# }else{
+#  ampseq_object_filtered = ampseq_object
+#  # if locus_ampl_rate was provided
+#  if(!is.na(locus_ampl_rate) & "loci_performance" %in% slotNames(ampseq_object_filtered)){
+#    ampseq_object_filtered = locus_amplification_rate(ampseq_object_filtered, threshold = locus_ampl_rate)
+#  }
+#  # if sample_ampl_rate was provided
+#  if(!is.na(sample_ampl_rate) & "sample_ampl_rate" %in% colnames(ampseq_object_filtered@metadata)){
+#    ampseq_object_filtered = sample_amplification_rate(ampseq_object_filtered, threshold = sample_ampl_rate)
+#  }
+#  # add metadata
+#  if(!is.na(metadata)){
+#    # Upload metadata from an external source
+#    print("Uploading metadata")
+#    metadata = read.csv(metadata)
+#    shared_variables = names(ampseq_object_filtered@metadata)[names(ampseq_object_filtered@metadata) %in% names(metadata)]
+#    shared_variables = shared_variables[!(shared_variables %in% c('Sample_id', join_by))]
+# 
+#    if(length(shared_variables) > 0){
+#      print(paste0('The following variables will be overwritten: ', paste(shared_variables, collapse = ', ')))
+#      for(variable in shared_variables){
+#        ampseq_object_filtered@metadata[[variable]] = NULL
+#      }
+#    }
+#    print("Adding metadata to ampseq object")
+#    # Merge the external metadata with our ampseq_object
+#    ampseq_object_filtered@metadata = left_join(ampseq_object_filtered@metadata,
+#                                                metadata,
+#                                                by = join_by)
+#    print(ampseq_object_filtered@metadata$Sample_id)
+#  }
+#  # if data was imported as cigar tables and no additional steps were provided
+#  #if(!is.na(cigar_paths)|!is.na(cigar_files) & is.na(ibd_thres) & !Drug_Surveillance_Report & !Variants_of_Interest_Report & !file.exists(file.path(paste0(output, '.xlsx')))){
+#    # save data in excel format
+#    # write_ampseq(ampseq_object = ampseq_object_filtered,
+#    #              format = 'excel',
+#    #              name = file.path(wd, paste0(output, '.xlsx')))
+#  #}
+# }
+# 
+# #
+# # Drug Resistance surveillance ----
+# 
+# if(Drug_Surveillance_Report){
+#  print('Starting drug surveillance report')
 #  variables = 'Sample_id'
-#  
+# 
 #  if(!is.na(Variable1)){
 #    variables = c(variables, Variable1)
 #  }
-#  
 #  if(!is.na(Variable2)){
 #    variables = c(variables, Variable2)
 #  }
+#  if(include_all_drug_markers){
+#    print('including drug markers with low amplification rate')
+#    ampseq_drug = ampseq_object_filtered
+#    ampseq_drug@gt = cbind(ampseq_drug@gt,
+#                                       ampseq_drug@discarded_loci$gt[rownames(ampseq_drug@discarded_loci$gt) %in%
+#                                                                                   rownames(ampseq_drug@gt),
+#                                                                                 grepl(paste0(gene_names, collapse = '|'),colnames(ampseq_drug@discarded_loci$gt))])
+#    ampseq_drug@markers = rbind(ampseq_drug@markers,
+#                                ampseq_drug@discarded_loci$markers[grepl(paste0(gene_names, collapse = '|'),ampseq_drug@discarded_loci$markers$amplicon),])
+#  }else{
+#    ampseq_drug = ampseq_object_filtered
+#  }
 #  
-#  haplotypes_respect_to_reference_plot = haplotypes_respect_to_reference(ampseq_object_filtered,
+#  gt = ampseq_drug@gt
+#  metadata_extracted = ampseq_drug@metadata
+#  markers_extracted = ampseq_object@markers
+#   
+#  drug_resistant_haplotypes_plot = drug_resistant_haplotypes(gt = gt,
+#                                                             reference_alleles = reference_alleles,
 #                                                             gene_names = gene_names,
 #                                                             gene_ids = gene_ids,
 #                                                             gff_file = ref_gff,
 #                                                             fasta_file = ref_fasta,
 #                                                             variables = variables,
-#                                                             plot_haplo_freq = TRUE,
+#                                                             Longitude = Longitude,
+#                                                             Latitude = Latitude,
 #                                                             na.var.rm = na_var_rm,
-#                                                             filters = var_filter)
-#  
-#  imagename = file.path(paste0(output, '_VoI_Report.RData'))
-#  
-#  save(file = imagename, list = c('haplotypes_respect_to_reference_plot'))
-#  
-#}
-#
-#
-## Genetic Variants of interest---
-#
-## Genetic Relatedness ----
-#
-#if(!is.na(ibd_thres)){
-#  
-#  # call hmmIBD and PCA functions from Rcpp
-#  sourceCpp(file.path(fd,'hmmloglikelihood.cpp'))
-#  
-#  if(nTasks > 1){
-#    
-#    if(ibd_step == 'pairwise'){
-#      
-#      if(!file.exists(file.path('pairwise_ibd_chunks'))){
-#        system(paste0('mkdir ', file.path('pairwise_ibd_chunks')))
-#      }
-#      
-#      chunks = round(seq(1, nChunks + 1, length.out = nTasks + 1))
-#      low = chunks[Task_id]
-#      high = chunks[Task_id + 1] - 1
-#      
-#      pairwise_relatedness = NULL
-#      
-#      for(w in low:high){
-#        start = Sys.time()
-#        pairwise_relatedness = rbind(pairwise_relatedness,
-#                                     pairwise_hmmIBD(ampseq_object_filtered, parallel = parallel, w = w, n = nChunks))
-#        time_diff = Sys.time() - start
-#        
-#        print(paste0('step ', w, ' done in ', time_diff, ' secs'))
-#        
-#      }
-#      
-#      write.csv(pairwise_relatedness,
-#                file.path('pairwise_ibd_chunks', paste0('pairwise_ibd_chunk_', Task_id, '.csv')),
-#                quote = FALSE,
-#                row.names = FALSE)
-#      
-#    }else if(ibd_step == 'merge'){
-#      
-#      pairwise_relatedness = NULL
-#      
-#      for(file in list.files(file.path('pairwise_ibd_chunks'))){
-#        
-#        pairwise_relatedness = rbind(pairwise_relatedness,
-#                                     read.csv(file.path('pairwise_ibd_chunks', file)))
-#        
-#      }
-#      
-#      write.csv(pairwise_relatedness,
-#                file.path(paste0(output, '_pairwise_ibd', '.csv')),
-#                quote = FALSE,
-#                row.names = FALSE)
-#      
-#      ## Genetic connectivity----      
-#      plot_relatedness_distribution_between = plot_relatedness_distribution(
-#        pairwise_relatedness = pairwise_relatedness,
-#        metadata = ampseq_object_filtered@metadata,
-#        Population = Variable1,
-#        fill_color = rep('gray50', 10),
-#        type_pop_comparison = 'between',
-#        ncol = ncol,
-#        pop_levels = pop_levels
-#      )
-#      
-#      plot_frac_highly_related_between = plot_frac_highly_related(
-#        pairwise_relatedness = pairwise_relatedness,
-#        metadata = ampseq_object_filtered@metadata,
-#        Population = Variable1,
-#        fill_color = rep('gray50', 10),
-#        threshold = 0.99,
-#        type_pop_comparison = 'between',
-#        pop_levels = pop_levels)
-#      
-#      imagename = paste0(output, '_ampseq.RData')
-#      
-#      save(file = imagename, list = c('ampseq_object_filtered',
-#                                      'pairwise_relatedness',
-#                                      'plot_relatedness_distribution_between', 
-#                                      'plot_frac_highly_related_between'))
-#      
-#      ## Population subdivision----
-#      
-#      # sourceCpp(file.path(fd,'Rcpp_functions.cpp'))
-#      #
-#      # evectors_IBD = IBD_evectors(ampseq_object = ampseq_object_filtered,
-#      #                             relatedness_table = pairwise_relatedness,
-#      #                             k = length(unique(c(pairwise_relatedness$Yi, pairwise_relatedness$Yi))),
-#      #                             Pop = Variable1, q = 2)
-#      # 
-#      # evectors_IBD$eigenvector %>% ggplot(aes(x = PC1, y = PC2, color = Population))+
-#      #   geom_point(alpha = .7, size = 2) +
-#      #   stat_ellipse(level = .6)+
-#      #   scale_color_manual(values = c('firebrick3', 'dodgerblue3', 'gold3'))+
-#      #   theme_bw()+
-#      #   labs(title = 'PvGTSeq',
-#      #        x = paste0('1st PC (', round(evectors_IBD$contrib[1],1), '%)'),
-#      #        y = paste0('2nd PC (', round(evectors_IBD$contrib[2],1), '%)'),
-#      #        color = 'Countries')
-#      
-#      
-#      ## Relatedness and transmission----
-#      
-#      
-#    }
-#    
-#  }else{
-#    
-#    pairwise_relatedness = NULL
-#    
-#    for(w in 1:nChunks){
-#      start = Sys.time()
-#      pairwise_relatedness = rbind(pairwise_relatedness,
-#                                   pairwise_hmmIBD(ampseq_object_filtered, parallel = parallel, w = w, n = nChunks))
-#      time_diff = Sys.time() - start
-#      
-#      print(paste0('step ', w, ' done in ', time_diff, ' secs'))
-#      
-#    }
-#    
-#    ## Genetic connectivity----
-#    plot_relatedness_distribution_between = plot_relatedness_distribution(
-#      pairwise_relatedness = pairwise_relatedness,
-#      metadata = ampseq_object_filtered@metadata,
-#      Population = geographic_population,
-#      fill_color = rep('gray50', 10),
-#      type_pop_comparison = 'between',
-#      ncol = ncol,
-#      pop_levels = pop_levels
-#    )
-#    
-#    plot_frac_highly_related_between = plot_frac_highly_related(
-#      pairwise_relatedness = pairwise_relatedness,
-#      metadata = ampseq_object_filtered@metadata,
-#      Population = geographic_population,
-#      fill_color = rep('gray50', 10),
-#      threshold = 0.99,
-#      type_pop_comparison = 'between',
-#      pop_levels = pop_levels)
-#    
-#    ## Population subdivision----
-#    
-#    # evectors_IBD = IBD_evectors(ampseq_object = ampseq_object_filtered,
-#    #                             relatedness_table = pairwise_relatedness,
-#    #                             k = length(unique(c(pairwise_relatedness$Yi, pairwise_relatedness$Yi))),
-#    #                             Pop = geographic_population, q = 2)
-#    # 
-#    # evectors_IBD$eigenvector %>% ggplot(aes(x = PC1, y = PC2, color = Population))+
-#    #   geom_point(alpha = .7, size = 2) +
-#    #   stat_ellipse(level = .6)+
-#    #   scale_color_manual(values = c('firebrick3', 'dodgerblue3', 'gold3'))+
-#    #   theme_bw()+
-#    #   labs(title = 'PvGTSeq',
-#    #        x = paste0('1st PC (', round(evectors_IBD$contrib[1],1), '%)'),
-#    #        y = paste0('2nd PC (', round(evectors_IBD$contrib[2],1), '%)'),
-#    #        color = 'Countries')
-#    
-#    
-#    ## Relatedness and transmission---- 
-#  }
-#}
-#
-## COI----
-## Genetic diversity----
+#                                                             na.hap.rm = na_hap_rm,
+#                                                             drugs = drugs,
+#                                                             filters = var_filter,
+#                                                             metadata_extracted = metadata_extracted,
+#                                                             markers_extracted = markers_extracted)
+# 
+#  print('Generation of plots and tables for DRS report done')
+#  imagename = file.path(paste0(output, '_DRS_Report.RData'))
+#  save(file = imagename, list = c('drug_resistant_haplotypes_plot'))
+#  system(paste0('cp ', file.path(fd, 'MHap_Analysis_DRS_Report_Template.Rmd'), ' ', file.path(paste0(output, '_DRS_Report.Rmd'))))
+# 
+#  # Assign variables based on command-line arguments
+#  render(file.path(paste0(output, '_DRS_Report.Rmd')), params = list(
+#    RData_image = imagename),
+#  output_dir = "Results")
+#  print("Leaving render script")
+# }
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# ## Variants of interest ----
+# #
+# #if(Variants_of_Interest_Report){
+# #  
+# #  variables = 'Sample_id'
+# #  
+# #  if(!is.na(Variable1)){
+# #    variables = c(variables, Variable1)
+# #  }
+# #  
+# #  if(!is.na(Variable2)){
+# #    variables = c(variables, Variable2)
+# #  }
+# #  
+# #  haplotypes_respect_to_reference_plot = haplotypes_respect_to_reference(ampseq_object_filtered,
+# #                                                             gene_names = gene_names,
+# #                                                             gene_ids = gene_ids,
+# #                                                             gff_file = ref_gff,
+# #                                                             fasta_file = ref_fasta,
+# #                                                             variables = variables,
+# #                                                             plot_haplo_freq = TRUE,
+# #                                                             na.var.rm = na_var_rm,
+# #                                                             filters = var_filter)
+# #  
+# #  imagename = file.path(paste0(output, '_VoI_Report.RData'))
+# #  
+# #  save(file = imagename, list = c('haplotypes_respect_to_reference_plot'))
+# #  
+# #}
+# #
+# #
+# ## Genetic Variants of interest---
+# #
+# ## Genetic Relatedness ----
+# #
+# #if(!is.na(ibd_thres)){
+# #  
+# #  # call hmmIBD and PCA functions from Rcpp
+# #  sourceCpp(file.path(fd,'hmmloglikelihood.cpp'))
+# #  
+# #  if(nTasks > 1){
+# #    
+# #    if(ibd_step == 'pairwise'){
+# #      
+# #      if(!file.exists(file.path('pairwise_ibd_chunks'))){
+# #        system(paste0('mkdir ', file.path('pairwise_ibd_chunks')))
+# #      }
+# #      
+# #      chunks = round(seq(1, nChunks + 1, length.out = nTasks + 1))
+# #      low = chunks[Task_id]
+# #      high = chunks[Task_id + 1] - 1
+# #      
+# #      pairwise_relatedness = NULL
+# #      
+# #      for(w in low:high){
+# #        start = Sys.time()
+# #        pairwise_relatedness = rbind(pairwise_relatedness,
+# #                                     pairwise_hmmIBD(ampseq_object_filtered, parallel = parallel, w = w, n = nChunks))
+# #        time_diff = Sys.time() - start
+# #        
+# #        print(paste0('step ', w, ' done in ', time_diff, ' secs'))
+# #        
+# #      }
+# #      
+# #      write.csv(pairwise_relatedness,
+# #                file.path('pairwise_ibd_chunks', paste0('pairwise_ibd_chunk_', Task_id, '.csv')),
+# #                quote = FALSE,
+# #                row.names = FALSE)
+# #      
+# #    }else if(ibd_step == 'merge'){
+# #      
+# #      pairwise_relatedness = NULL
+# #      
+# #      for(file in list.files(file.path('pairwise_ibd_chunks'))){
+# #        
+# #        pairwise_relatedness = rbind(pairwise_relatedness,
+# #                                     read.csv(file.path('pairwise_ibd_chunks', file)))
+# #        
+# #      }
+# #      
+# #      write.csv(pairwise_relatedness,
+# #                file.path(paste0(output, '_pairwise_ibd', '.csv')),
+# #                quote = FALSE,
+# #                row.names = FALSE)
+# #      
+# #      ## Genetic connectivity----      
+# #      plot_relatedness_distribution_between = plot_relatedness_distribution(
+# #        pairwise_relatedness = pairwise_relatedness,
+# #        metadata = ampseq_object_filtered@metadata,
+# #        Population = Variable1,
+# #        fill_color = rep('gray50', 10),
+# #        type_pop_comparison = 'between',
+# #        ncol = ncol,
+# #        pop_levels = pop_levels
+# #      )
+# #      
+# #      plot_frac_highly_related_between = plot_frac_highly_related(
+# #        pairwise_relatedness = pairwise_relatedness,
+# #        metadata = ampseq_object_filtered@metadata,
+# #        Population = Variable1,
+# #        fill_color = rep('gray50', 10),
+# #        threshold = 0.99,
+# #        type_pop_comparison = 'between',
+# #        pop_levels = pop_levels)
+# #      
+# #      imagename = paste0(output, '_ampseq.RData')
+# #      
+# #      save(file = imagename, list = c('ampseq_object_filtered',
+# #                                      'pairwise_relatedness',
+# #                                      'plot_relatedness_distribution_between', 
+# #                                      'plot_frac_highly_related_between'))
+# #      
+# #      ## Population subdivision----
+# #      
+# #      # sourceCpp(file.path(fd,'Rcpp_functions.cpp'))
+# #      #
+# #      # evectors_IBD = IBD_evectors(ampseq_object = ampseq_object_filtered,
+# #      #                             relatedness_table = pairwise_relatedness,
+# #      #                             k = length(unique(c(pairwise_relatedness$Yi, pairwise_relatedness$Yi))),
+# #      #                             Pop = Variable1, q = 2)
+# #      # 
+# #      # evectors_IBD$eigenvector %>% ggplot(aes(x = PC1, y = PC2, color = Population))+
+# #      #   geom_point(alpha = .7, size = 2) +
+# #      #   stat_ellipse(level = .6)+
+# #      #   scale_color_manual(values = c('firebrick3', 'dodgerblue3', 'gold3'))+
+# #      #   theme_bw()+
+# #      #   labs(title = 'PvGTSeq',
+# #      #        x = paste0('1st PC (', round(evectors_IBD$contrib[1],1), '%)'),
+# #      #        y = paste0('2nd PC (', round(evectors_IBD$contrib[2],1), '%)'),
+# #      #        color = 'Countries')
+# #      
+# #      
+# #      ## Relatedness and transmission----
+# #      
+# #      
+# #    }
+# #    
+# #  }else{
+# #    
+# #    pairwise_relatedness = NULL
+# #    
+# #    for(w in 1:nChunks){
+# #      start = Sys.time()
+# #      pairwise_relatedness = rbind(pairwise_relatedness,
+# #                                   pairwise_hmmIBD(ampseq_object_filtered, parallel = parallel, w = w, n = nChunks))
+# #      time_diff = Sys.time() - start
+# #      
+# #      print(paste0('step ', w, ' done in ', time_diff, ' secs'))
+# #      
+# #    }
+# #    
+# #    ## Genetic connectivity----
+# #    plot_relatedness_distribution_between = plot_relatedness_distribution(
+# #      pairwise_relatedness = pairwise_relatedness,
+# #      metadata = ampseq_object_filtered@metadata,
+# #      Population = geographic_population,
+# #      fill_color = rep('gray50', 10),
+# #      type_pop_comparison = 'between',
+# #      ncol = ncol,
+# #      pop_levels = pop_levels
+# #    )
+# #    
+# #    plot_frac_highly_related_between = plot_frac_highly_related(
+# #      pairwise_relatedness = pairwise_relatedness,
+# #      metadata = ampseq_object_filtered@metadata,
+# #      Population = geographic_population,
+# #      fill_color = rep('gray50', 10),
+# #      threshold = 0.99,
+# #      type_pop_comparison = 'between',
+# #      pop_levels = pop_levels)
+# #    
+# #    ## Population subdivision----
+# #    
+# #    # evectors_IBD = IBD_evectors(ampseq_object = ampseq_object_filtered,
+# #    #                             relatedness_table = pairwise_relatedness,
+# #    #                             k = length(unique(c(pairwise_relatedness$Yi, pairwise_relatedness$Yi))),
+# #    #                             Pop = geographic_population, q = 2)
+# #    # 
+# #    # evectors_IBD$eigenvector %>% ggplot(aes(x = PC1, y = PC2, color = Population))+
+# #    #   geom_point(alpha = .7, size = 2) +
+# #    #   stat_ellipse(level = .6)+
+# #    #   scale_color_manual(values = c('firebrick3', 'dodgerblue3', 'gold3'))+
+# #    #   theme_bw()+
+# #    #   labs(title = 'PvGTSeq',
+# #    #        x = paste0('1st PC (', round(evectors_IBD$contrib[1],1), '%)'),
+# #    #        y = paste0('2nd PC (', round(evectors_IBD$contrib[2],1), '%)'),
+# #    #        color = 'Countries')
+# #    
+# #    
+# #    ## Relatedness and transmission---- 
+# #  }
+# #}
+# #
+# ## COI----
+# ## Genetic diversity----

@@ -831,6 +831,13 @@ haplotypes_respect_to_reference = function(ampseq_object,
                                            na.var.rm = FALSE){
   library(ape)
   library(Biostrings)
+  print("Inside haplotypes_respect_to_reference")
+  print("gene_names")
+  print(gene_names)
+  print("gene_ids")
+  print(gene_ids)
+  print("ampseq_object")
+  print(ampseq_object)
   
   # Call 3D7 genome and gff---
   # Call 3D7 reference genome and its corresponding annotation in the gff file
@@ -852,7 +859,6 @@ haplotypes_respect_to_reference = function(ampseq_object,
   for(gene in 1:length(gene_names)){
     markers_of_interest[grepl(gene_names[gene], markers_of_interest[['amplicon']]),][['gene_ids']] = gene_ids[gene]
   }
-  
   # Calculates the start and end position of each drugR marker on the CDS of each gene---
   
   ## Start and end position in 3D7 CDSs---
@@ -920,7 +926,6 @@ haplotypes_respect_to_reference = function(ampseq_object,
     }
   }
   
-  
   # Generate a reference sequence of each gene---
   # Genes located in the negative strand will not be transformed to their reverse complement yet
   
@@ -972,7 +977,6 @@ haplotypes_respect_to_reference = function(ampseq_object,
                                 dimnames = list(rownames(ampseq_object@gt),
                                                 gene_names))
   }
-  
   
   ## Remove read abundace---
   moi_loci_abd_table = gsub(":[0-9]+", "", moi_loci_abd_table)
@@ -1134,9 +1138,7 @@ haplotypes_respect_to_reference = function(ampseq_object,
     }
   }
   
-  
   if(plot_haplo_freq){
-    
     
     # Empty table to fill cigar outputs
     aacigar_table = matrix(NA,
@@ -1145,11 +1147,14 @@ haplotypes_respect_to_reference = function(ampseq_object,
                            dimnames = list(rownames(moi_loci_aa_table),
                                            gene_names))
     
-    
     for(gene in 1:length(gene_names)){
       
       if(length(gene_names) > 1){
-        gene_aa = moi_loci_aa_table[,grepl(gene_names[gene], colnames(moi_loci_aa_table))]  
+        gene_aa = matrix(moi_loci_aa_table[,grepl(gene_names[gene], colnames(moi_loci_aa_table))],
+                         ncol = sum(grepl(gene_names[gene], colnames(moi_loci_aa_table))),
+                         dimnames = list(rownames(moi_loci_aa_table),
+                                         colnames(moi_loci_aa_table)[grepl(gene_names[gene], colnames(moi_loci_aa_table))]))
+        #gene_aa = moi_loci_aa_table[,grepl(gene_names[gene], colnames(moi_loci_aa_table))]  
       }else{
         gene_aa = matrix(moi_loci_aa_table[,grepl(gene_names[gene], colnames(moi_loci_aa_table))],
                          ncol = 1,
@@ -1177,15 +1182,17 @@ haplotypes_respect_to_reference = function(ampseq_object,
         amplicons = gene_of_interest_info$amplicon
         
       }
-      
       # for each amplicon in the gene
       for(amplicon in amplicons){
-        
         # get all observed polymorphic positions in the population sorted
-        positions = stringr::str_extract(unique(gene_aa[,amplicon]), '\\d+')
+        positions = unlist(stringr::str_extract(gene_aa[,grepl(amplicon, colnames(gene_aa))], '\\d+'))
         positions = positions[!is.na(positions)]
-        positions = unique(positions)
-        positions = sort(positions)
+        if(sum(positions != "p.(=)") > 0){
+          positions = unique(positions)
+          positions = sort(positions)
+        }else{
+          positions = NULL
+        }
         
         # for each sample
         for(sample in 1:nrow(gene_aa)){
@@ -1412,7 +1419,6 @@ haplotypes_respect_to_reference = function(ampseq_object,
       }
     }
     
-    
     haplotype_counts$freq = NA
     
     for(gene in levels(as.factor(haplotype_counts$gene_names))){
@@ -1447,7 +1453,6 @@ haplotypes_respect_to_reference = function(ampseq_object,
       }
       
     }
-    
     
     haplotype_counts %<>% mutate(gene_haplo = paste(gene_names, haplotype, sep = ": "))
     
@@ -1521,7 +1526,6 @@ haplotypes_respect_to_reference = function(ampseq_object,
     
     
   }
-  
   
   return(haplotypes_respect_to_reference)
   
@@ -2861,9 +2865,9 @@ drug_resistant_haplotypes = function(ampseq_object,
     print("Transforming data to spatial points")
     drug_phenotype_summary_sdf = SpatialPointsDataFrame(coords = drug_phenotype_summary_sdf[,c("Longitude", "Latitude")],
                                                         data = drug_phenotype_summary_sdf,
-                                                        proj4string = CRS("+init=epsg:4326"))
+                                                        proj4string = CRS("+proj=longlat +datum=WGS84"))
     
-    
+    print("Creating spatial map")
     tmap_mode('view')
     print('i_drug_map')
     i_drug_map = tm_shape(drug_phenotype_summary_sdf)+
